@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage>{
           Icon(Icons.info, color: Colors.blue),
           Padding(
             padding: EdgeInsets.only(left: 10),
-            child: Text('Visualizar'),
+            child: Text('Detalhes'),
           ),
         ],
       ),
