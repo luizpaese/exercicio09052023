@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 import '../dao/registro_dao.dart';
 
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage>{
 
   AppBar _criarAppBar(){
     return AppBar(
-      title: Text("GPS"),
+      title: Text("Ponto Eletrônico"),
     );
   }
 
@@ -77,14 +78,20 @@ class _HomePageState extends State<HomePage>{
                   final registro = _registros[index];
                   return PopupMenuButton<String>(
                     child: ListTile(
-                      title: Text('${registro.id}'),
+                      leading: Text('${registro.id}'),
+                      title: Text('${registro.data}'),
+                      subtitle: Text('Lat: ${registro.latitude} '
+                          'Long: ${registro.longitude}'),
                     ),
                     itemBuilder: (_) => _criarItensMenuPopup(),
                     onSelected: (String valorSelecionado) {
                       if (valorSelecionado == acaoVisualizar) {
                         _abrirPaginaDetalhes(registro);
                       }else if (valorSelecionado == acaoMapa) {
-
+                        _abrirCoordenadasMapaExterno(
+                            registro.latitude!,
+                            registro.longitude!
+                        );
                       }
                     },
                   );
@@ -131,6 +138,16 @@ class _HomePageState extends State<HomePage>{
             pe: pe,
           ),
         ));
+  }
+
+  void _abrirCoordenadasMapaExterno(String lat, String long){
+    if(lat == 'null' || long == 'null'){
+      return;
+    }
+    MapsLauncher.launchCoordinates(
+        double.parse(lat),
+        double.parse(long)
+    );
   }
 
   void _atualizarLista() async {
